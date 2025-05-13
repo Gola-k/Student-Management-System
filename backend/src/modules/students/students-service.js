@@ -1,6 +1,7 @@
 const { ApiError, sendAccountVerificationEmail } = require("../../utils");
 const { findAllStudents, findStudentDetail, findStudentToSetStatus, addOrUpdateStudent } = require("./students-repository");
 const { findUserById } = require("../../shared/repository");
+const logger = require("../../utils/logger");
 
 const checkStudentId = async (id) => {
     const isStudentFound = await findUserById(id);
@@ -50,12 +51,19 @@ const addNewStudent = async (payload) => {
 }
 
 const updateStudent = async (payload) => {
-    const result = await addOrUpdateStudent(payload);
-    if (!result.status) {
-        throw new ApiError(500, result.message);
+    try {
+        logger.info(`Updating student with payload: ${JSON.stringify(payload)}`);
+        const result = await addOrUpdateStudent(payload);
+        if (!result.status) {
+            logger.error(`Failed to update student. Payload: ${JSON.stringify(payload)}, Error: ${result.message}`);
+            throw new ApiError(500, result.message || "Unable to update student.");
+        }
+        logger.info(`Student update successful. Payload: ${JSON.stringify(payload)}`);
+        return { message: result.message };
+    } catch (error) {
+        logger.error(`Exception in updateStudent: ${error.message || error}`);
+        throw new ApiError(500, error.message || "Unknown error in updateStudent");
     }
-
-    return { message: result.message };
 }
 
 const setStudentStatus = async ({ userId, reviewerId, status }) => {

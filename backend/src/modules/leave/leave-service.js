@@ -1,5 +1,6 @@
 const { ApiError } = require("../../utils");
 const { createNewLeavePolicy, updateLeavePolicyById, getLeavePolicies, getUsersByPolicyId, updatePolicyUsersById, enableDisableLeavePolicy, deleteUserFromPolicyById, getPolicyEligibleUsers, createNewLeaveRequest, updateLeaveRequestById, getLeaveRequestHistoryByUser, deleteLeaveRequestByRequestId, getPendingLeaveRequests, approveOrCancelPendingLeaveRequest, findReviewerIdByRequestId, getMyLeavePolicy, findPolicyStatusById } = require("./leave-repository");
+const logger = require("../../utils/logger");
 
 const checkIfPolicyIsActive = async (id) => {
     const policy = await findPolicyStatusById(id);
@@ -27,21 +28,32 @@ const updateLeavePolicy = async (name, id) => {
 }
 
 const fetchLeavePolicies = async () => {
-    const policies = await getLeavePolicies();
-    if (!Array.isArray(policies) || policies.length <= 0) {
-        throw new ApiError(404, "Leave policies not found");
+    try {
+        const policies = await getLeavePolicies();
+        if (!Array.isArray(policies) || policies.length <= 0) {
+            logger.warn("No leave policies found in DB");
+            throw new ApiError(404, "Leave policies not found");
+        }
+        return policies;
+    } catch (error) {
+        logger.error(`Error fetching leave policies: ${error.message || error}`);
+        throw new ApiError(500, error.message || "Unknown error in fetchLeavePolicies");
     }
-
-    return policies;
 }
 
 const processGetMyLeavePolicy = async (id) => {
-    const policies = await getMyLeavePolicy(id);
-    if (!Array.isArray(policies) || policies.length <= 0) {
-        throw new ApiError(404, "Leave policies not found");
+    try {
+        logger.info(`Fetching leave policy for user: ${id}`);
+        const policies = await getMyLeavePolicy(id);
+        if (!Array.isArray(policies) || policies.length <= 0) {
+            logger.warn(`No leave policies found for user: ${id}`);
+            throw new ApiError(404, `Leave policies not found for user: ${id}`);
+        }
+        return policies;
+    } catch (error) {
+        logger.error(`Error in processGetMyLeavePolicy for user ${id}: ${error.message || error}`);
+        throw new ApiError(500, error.message || "Unknown error in processGetMyLeavePolicy");
     }
-
-    return policies;
 }
 
 const fetchPolicyUsers = async (id) => {
