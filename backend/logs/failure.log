@@ -1,0 +1,8 @@
+[13-05-2025 22:05:03] <[31merror[39m> :: Error in processGetMyLeavePolicy for user 1: Leave policies not found for user: 1
+[13-05-2025 22:05:24] <[31merror[39m> :: Error in processGetMyLeavePolicy for user 1: Leave policies not found for user: 1
+[13-05-2025 22:05:57] <[31merror[39m> :: Error in processGetMyLeavePolicy for user 1: Leave policies not found for user: 1
+[13-05-2025 22:06:26] <[31merror[39m> :: Error in processGetMyLeavePolicy for user 1: Leave policies not found for user: 1
+[13-05-2025 22:08:40] <[31merror[39m> :: Error in processGetMyLeavePolicy for user 1: Leave policies not found for user: 1
+[13-05-2025 22:10:29] <[31merror[39m> :: Error in processGetMyLeavePolicy for user 1: Leave policies not found for user: 1
+[13-05-2025 22:10:55] <[31merror[39m> :: Failed to update student. Payload: {"name":"kavya","gender":"Female","dob":"2025-05-12T18:30:00.000Z","phone":"0934567890","email":"qwert@gmail.com","class":"X","section":"A","roll":"'15'","admissionDate":"2025-05-12T18:30:00.000Z","currentAddress":"qwertyuiop asdfghjkl zxcvbnm","permanentAddress":"qwertyuiop asdfghjkl zxcvbnm","fatherName":"paul","fatherPhone":"6789054321","motherName":"christine","motherPhone":"0987612345","guardianName":"jacob","guardianPhone":"5432167890","relationOfGuardian":"uncle","systemAccess":false,"userId":"4"}, Error: null
+[13-05-2025 22:10:55] <[31merror[39m> :: Exception in updateStudent: Unable to update student.
